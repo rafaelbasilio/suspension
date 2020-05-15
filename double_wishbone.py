@@ -134,6 +134,11 @@ class double_wishbone:
         r0_bq = np.matmul(A_w,r_bq)
         self.r_0q = self.r_0b + r0_bq
         
+        ###################################
+        #      Wheel Center Movement      #
+        ###################################
+        r_bw = A_w*(self.WC-self.B)
+        self.r_0w = self.r_0b + r_bw 
         
         self.draw_system()
         
@@ -159,10 +164,10 @@ class double_wishbone:
         sb_y = np.array([self.r_0q[1,0],self.r_0r[1,0]])
         sb_z = np.array([self.r_0q[2,0],self.r_0r[2,0]])
         
-#        # Wheel Center
-#        wc_x = np.array([self.r_0w[0],(self.r_0e[0]+self.r_0b[0])/2])
-#        wc_y = np.array([self.r_0w[1],(self.r_0e[1]+self.r_0b[1])/2])
-#        wc_z = np.array([self.r_0w[2],(self.r_0e[2]+self.r_0b[2])/2])
+        # Wheel Center
+        wc_x = np.array([self.r_0w[0,0],(self.r_0e[0,0]+self.r_0b[0,0])/2])
+        wc_y = np.array([self.r_0w[1,0],(self.r_0e[1,0]+self.r_0b[1,0])/2])
+        wc_z = np.array([self.r_0w[2,0],(self.r_0e[2,0]+self.r_0b[2,0])/2])
         
         ax = plt.axes(projection="3d")
         ax.set_xlim(-1,4)
@@ -173,19 +178,20 @@ class double_wishbone:
         ax.plot3D(uwb_x,uwb_y,uwb_z,'gray')
         ax.plot3D(kp_x,kp_y,kp_z,'gray')
         ax.plot3D(sb_x,sb_y,sb_z,'gray')
+        ax.plot3D(wc_x,wc_y,wc_z, 'gray')
         plt.show()
 
 suspensao = double_wishbone()
 suspensao.kinematics(0,0)
 for i in range(-10,10):
-   suspensao.kinematics(0,-i/100.0)
+   suspensao.kinematics(-i/100.0,0)
    plt.pause(0.1)
 for i in range(-10,10):
-   suspensao.kinematics(0,i/100.0)
+   suspensao.kinematics(i/100.0,0)
    plt.pause(0.1)
 for i in range(-10,10):
-   suspensao.kinematics(0,-i/100.0)
+   suspensao.kinematics(-i/100.0,0)
    plt.pause(0.1)
 for i in range(-10,10):
-   suspensao.kinematics(0,i/100.0)
+   suspensao.kinematics(i/100.0,0)
    plt.pause(0.1)
