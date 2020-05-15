@@ -2,7 +2,7 @@
 """
 Created on Sat Jul 20 08:54:13 2019
 
-@author: Raquel
+@author: Rafael
 """
 import numpy as np
 from aux_functions import skew_symmetric, trigon
@@ -105,18 +105,21 @@ class double_wishbone:
         
         self.r_0r = self.R + np.array([0,u,0])
         r_rb = self.r_0b - self.r_0r
-        rrcht = np.matmul(r_rb,A_alpha*A_beta)
+        rrcht = np.matmul(np.transpose(r_rb),np.matmul(A_alpha,A_beta))
         r_rq = self.Q - self.R
         r_bq = self.Q - self.B 
         r_be = self.E - self.B
         e_be = r_be / np.linalg.norm(r_be)
-        e_be2 = e_be*e_be
+        e_be2 = e_be*np.transpose(e_be)
         e_beS = skew_symmetric(e_be)
         
-        a = np.dot(np.matmul(rrcht,(np.identity(3)-e_be2)),r_bq)
+        a = np.dot(rrcht,np.matmul((np.identity(3)-e_be2),r_bq))
         b = np.dot(rrcht,np.cross(e_be,r_bq))
-        c = -np.dot(rrcht,e_be2*r_bq) - 0.5*(np.dot(r_rb,r_rb)+np.dot(r_bq,r_bq)-np.dot(r_rq,r_rq))
         
+        p1 = np.dot(rrcht,np.array([1,0,0]))
+        p2 = np.dot(np.transpose(r_rb),r_rb)+np.dot(np.transpose(r_bq),r_bq)-np.dot(np.transpose(r_rq),r_rq)
+
+        c = -(p1 + 0.5*p2)
         
         delta=trigon(a,b,c)
         A_delta= e_be2 + (np.identity(3)-e_be2)*np.cos(delta) + e_beS*np.sin(delta)
@@ -167,7 +170,7 @@ class double_wishbone:
         plt.show()
 
 suspensao = double_wishbone()
-#suspensao.kinematics(0,0)
+suspensao.kinematics(0,0)
 for i in range(-10,10):
    suspensao.kinematics(-i/100.0,0)
    plt.pause(0.1)
