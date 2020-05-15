@@ -12,21 +12,21 @@ import matplotlib.pyplot as plt
 class double_wishbone:
     def __init__(self):
         # Lower wishbone
-        self.A = np.array([ 1,0,0])
-        self.B = np.array([ 0,2,0])
-        self.C = np.array([-1,0,0])
-    
+        self.A = np.matrix([1,0,0]).T
+        self.B = np.matrix([0,2,0]).T
+        self.C = np.matrix([-1,0,0]).T
+        
         # Upper wishbone    
-        self.D = np.array([ 1,0,2])
-        self.E = np.array([ 0,2,2])
-        self.F = np.array([-1,0,2])
+        self.D = np.matrix([ 1,0,2]).T
+        self.E = np.matrix([ 0,2,2]).T
+        self.F = np.matrix([-1,0,2]).T
     
         # Steering bar
-        self.R = np.array([0.5,0,1])
-        self.Q = np.array([0.5,2,1])
+        self.R = np.matrix([0.5,0,1]).T
+        self.Q = np.matrix([0.5,2,1]).T
         
         # Wheel center
-        self.WC = np.array([0,3,1])
+        self.WC = np.matrix([0,3,1]).T
         
     def kinematics(self,phi,u):
         ###################################
@@ -43,7 +43,7 @@ class double_wishbone:
         e_acS = skew_symmetric(e_ac)
         
         # Rotation axis squared for later calculations
-        e_ac2 = e_ac*np.transpose(e_ac)
+        e_ac2 = e_ac*e_ac.T
         
         # Also part of A_phi calculation
         eye_ac = np.identity(3) - e_ac2
@@ -61,12 +61,15 @@ class double_wishbone:
         r_bd = self.D - (self.A+r_ab)
         r_df = self.F - self.D
         e_df = r_df/np.linalg.norm(r_df)
-        e_df2 = e_df*np.transpose(e_df)
+        e_df2 = e_df*e_df.T
         e_dfS = skew_symmetric(e_df)
         
-        a = np.dot(np.matmul(np.transpose(r_bd),(np.identity(3)-e_df2)),r_de)
-        b = np.dot(np.transpose(r_bd),np.cross(e_df,r_de))
-        c = np.dot(-np.transpose(r_bd)*e_df2,r_de) - 0.5*(np.dot(r_de,r_de)+np.dot(r_bd,r_bd)-np.dot(r_be,r_be))
+        a = np.dot(np.matmul(r_bd.T,(np.identity(3)-e_df2)),r_de)
+        
+        b_aux = np.cross(e_df.T,r_de.T)
+        b_aux.shape = (3,1)
+        b = np.dot(r_bd.T,b_aux)
+        c = np.dot(-r_bd.T*e_df2,r_de) - 0.5*(np.dot(r_de.T,r_de)+np.dot(r_bd.T,r_bd)-np.dot(r_be.T,r_be))
         
         psi = trigon(a,b,c);
         
@@ -103,21 +106,24 @@ class double_wishbone:
         ###################################
   
         
-        self.r_0r = self.R + np.array([0,u,0])
+        self.r_0r = self.R + np.matrix([0,u,0]).T
         r_rb = self.r_0b - self.r_0r
-        rrcht = np.matmul(np.transpose(r_rb),np.matmul(A_alpha,A_beta))
+        rrcht = r_rb.T*np.matmul(A_alpha,A_beta)
         r_rq = self.Q - self.R
         r_bq = self.Q - self.B 
         r_be = self.E - self.B
         e_be = r_be / np.linalg.norm(r_be)
-        e_be2 = e_be*np.transpose(e_be)
+        e_be2 = e_be*e_be.T
         e_beS = skew_symmetric(e_be)
         
         a = np.dot(rrcht,np.matmul((np.identity(3)-e_be2),r_bq))
-        b = np.dot(rrcht,np.cross(e_be,r_bq))
         
-        p1 = np.dot(rrcht,np.array([1,0,0]))
-        p2 = np.dot(np.transpose(r_rb),r_rb)+np.dot(np.transpose(r_bq),r_bq)-np.dot(np.transpose(r_rq),r_rq)
+        b_aux = np.cross(e_be.T,r_bq.T)
+        b_aux.shape = (3,1)
+        b = np.dot(rrcht,b_aux)
+        
+        p1 = rrcht*e_be2*r_bq
+        p2 = np.dot(r_rb.T,r_rb)+np.dot(r_bq.T,r_bq)-np.dot(r_rq.T,r_rq)
 
         c = -(p1 + 0.5*p2)
         
@@ -134,24 +140,24 @@ class double_wishbone:
         
     def draw_system(self):
         # Lower wishbone
-        lwb_x = np.array([self.A[0], self.r_0b[0], self.C[0]])
-        lwb_y = np.array([self.A[1], self.r_0b[1], self.C[1]])
-        lwb_z = np.array([self.A[2], self.r_0b[2], self.C[2]])
+        lwb_x = np.array([self.A[0,0], self.r_0b[0,0], self.C[0,0]])
+        lwb_y = np.array([self.A[1,0], self.r_0b[1,0], self.C[1,0]])
+        lwb_z = np.array([self.A[2,0], self.r_0b[2,0], self.C[2,0]])
 
         # Upper wishbone
-        uwb_x = np.array([self.D[0], self.r_0e[0], self.F[0]])
-        uwb_y = np.array([self.D[1], self.r_0e[1], self.F[1]])
-        uwb_z = np.array([self.D[2], self.r_0e[2], self.F[2]])
+        uwb_x = np.array([self.D[0,0], self.r_0e[0,0], self.F[0,0]])
+        uwb_y = np.array([self.D[1,0], self.r_0e[1,0], self.F[1,0]])
+        uwb_z = np.array([self.D[2,0], self.r_0e[2,0], self.F[2,0]])
         
         # Kingpin
-        kp_x = np.array([self.r_0b[0],self.r_0e[0]])
-        kp_y = np.array([self.r_0b[1],self.r_0e[1]])
-        kp_z = np.array([self.r_0b[2],self.r_0e[2]])
+        kp_x = np.array([self.r_0b[0,0],self.r_0e[0,0]])
+        kp_y = np.array([self.r_0b[1,0],self.r_0e[1,0]])
+        kp_z = np.array([self.r_0b[2,0],self.r_0e[2,0]])
         
         # Steering bar
-        sb_x = np.array([self.r_0q[0],self.r_0r[0]])
-        sb_y = np.array([self.r_0q[1],self.r_0r[1]])
-        sb_z = np.array([self.r_0q[2],self.r_0r[2]])
+        sb_x = np.array([self.r_0q[0,0],self.r_0r[0,0]])
+        sb_y = np.array([self.r_0q[1,0],self.r_0r[1,0]])
+        sb_z = np.array([self.r_0q[2,0],self.r_0r[2,0]])
         
 #        # Wheel Center
 #        wc_x = np.array([self.r_0w[0],(self.r_0e[0]+self.r_0b[0])/2])
@@ -172,14 +178,14 @@ class double_wishbone:
 suspensao = double_wishbone()
 suspensao.kinematics(0,0)
 for i in range(-10,10):
-   suspensao.kinematics(-i/100.0,0)
+   suspensao.kinematics(0,-i/100.0)
    plt.pause(0.1)
 for i in range(-10,10):
-   suspensao.kinematics(i/100.0,0)
+   suspensao.kinematics(0,i/100.0)
    plt.pause(0.1)
 for i in range(-10,10):
-   suspensao.kinematics(-i/100.0,0)
+   suspensao.kinematics(0,-i/100.0)
    plt.pause(0.1)
 for i in range(-10,10):
-   suspensao.kinematics(i/100.0,0)
+   suspensao.kinematics(0,i/100.0)
    plt.pause(0.1)

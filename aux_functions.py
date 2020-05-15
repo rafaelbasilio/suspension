@@ -6,9 +6,10 @@ import numpy as np
 import math
 
 def skew_symmetric(r):
-    A = np.array([[   0 , -r[2] ,  r[1]],
-                  [ r[2],    0  , -r[0]],
-                  [-r[1],  r[0] ,   0 ]])
+    r = r.T
+    A = np.array([[   0 , -r[0,2] ,  r[0,1]],
+                  [ r[0,2],    0  , -r[0,0]],
+                  [-r[0,1],  r[0,0] ,   0 ]])
     return A
 
 def trigon(a,b,c):
