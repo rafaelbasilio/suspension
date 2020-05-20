@@ -96,18 +96,18 @@ class application:
         
         labelSimDet1 = ttk.Label(self.HardpointInfo, text = "max. angle [deg]")
         labelSimDet1.grid(column=0, row=12, sticky="W", padx=5, pady=3)
-        SimDet1 = Entry(self.HardpointInfo)
+        SimDet1 = Entry(self.HardpointInfo, width=10)
         SimDet1.grid(column=1, row=12, sticky="W", padx=5, pady=3)
 
         labelSimDet2 = ttk.Label(self.HardpointInfo, text = "min. angle [deg]")
         labelSimDet2.grid(column=0, row=13, sticky="W", padx=5, pady=3)
-        SimDet2 = Entry(self.HardpointInfo)
+        SimDet2 = Entry(self.HardpointInfo, width=10)
         SimDet2.grid(column=1, row=13, sticky="W", padx=5, pady=3)
 
         buttonSet = ttk.Button(master=self.HardpointInfo, text="Set", command=kinematics.setHardpoints)
         buttonSet.grid(column=0, row=14, sticky="W", padx=5, pady=3)
 
-        buttonSimulate = ttk.Button(master=self.HardpointInfo, text="Simulate")
+        buttonSimulate = ttk.Button(master=self.HardpointInfo, text="Simulate", command=lambda: kinematics.simulate(10, -10, 0, 0))
         buttonSimulate.grid(column=1, row=14, sticky="W", padx=5, pady=3)
 
 window = Tk()
