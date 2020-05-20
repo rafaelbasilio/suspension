@@ -4,6 +4,15 @@
 """
 import numpy as np
 from aux_functions import skew_symmetric, trigon
+from tkinter import *
+from tkinter import ttk
+from mpl_toolkits import mplot3d
+import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('TkAgg')
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+from matplotlib.figure import Figure
+from matplotlib import pyplot as plt
 
 class double_wishbone:
     def __init__(self):
@@ -23,7 +32,117 @@ class double_wishbone:
         
         # Wheel center
         self.WC = np.matrix([0,300,100]).T
+    
+    def doubleWishboneInputs(self, HardpointInfo):
+        labelHP1 = ttk.Label(HardpointInfo, text = "LWB Forward")
+        labelHP1.grid(column=0, row=2, sticky="W", padx=5, pady=3)
+        self.HP1 = Entry(HardpointInfo)
+        self.HP1.grid(column=1, row=2, sticky="W", padx=5, pady=3)
+
+        labelHP2 = ttk.Label(HardpointInfo, text = "LWB Backward")
+        labelHP2.grid(column=0, row=3, sticky="W", padx=5, pady=3)
+        self.HP2 = Entry(HardpointInfo)
+        self.HP2.grid(column=1, row=3, sticky="W", padx=5, pady=3)
+
+        labelHP3 = ttk.Label(HardpointInfo, text = "LWB Outboard")
+        labelHP3.grid(column=0, row=4, sticky="W", padx=5, pady=3)
+        self.HP3 = Entry(HardpointInfo)
+        self.HP3.grid(column=1, row=4, sticky="W", padx=5, pady=3)
+
+        labelHP4 = ttk.Label(HardpointInfo, text = "UWB Forward")
+        labelHP4.grid(column=0, row=5, sticky="W", padx=5, pady=3)
+        self.HP4 = Entry(HardpointInfo)
+        self.HP4.grid(column=1, row=5, sticky="W", padx=5, pady=3)
+
+        labelHP5 = ttk.Label(HardpointInfo, text = "UWB Backward")
+        labelHP5.grid(column=0, row=6, sticky="W", padx=5, pady=3)
+        self.HP5 = Entry(HardpointInfo)
+        self.HP5.grid(column=1, row=6, sticky="W", padx=5, pady=3)
+
+        labelHP6 = ttk.Label(HardpointInfo, text = "UWB Outboard")
+        labelHP6.grid(column=0, row=7, sticky="W", padx=5, pady=3)
+        self.HP6 = Entry(HardpointInfo)
+        self.HP6.grid(column=1, row=7, sticky="W", padx=5, pady=3)
+
+        labelHP7 = ttk.Label(HardpointInfo, text = "Steering bar in")
+        labelHP7.grid(column=0, row=8, sticky="W", padx=5, pady=3)
+        self.HP7 = Entry(HardpointInfo)
+        self.HP7.grid(column=1, row=8, sticky="W", padx=5, pady=3)
+
+        labelHP8 = ttk.Label(HardpointInfo, text = "Steering bar Out")
+        labelHP8.grid(column=0, row=9, sticky="W", padx=5, pady=3)
+        self.HP8 = Entry(HardpointInfo)
+        self.HP8.grid(column=1, row=9, sticky="W", padx=5, pady=3)
+
+        labelHP9 = ttk.Label(HardpointInfo, text = "Wheel center")
+        labelHP9.grid(column=0, row=10, sticky="W", padx=5, pady=3)
+        self.HP9 = Entry(HardpointInfo)
+        self.HP9.grid(column=1, row=10, sticky="W", padx=5, pady=3)
+
+    def setHardpoints(self):
+        self.kinematics(0,0)
+        self.updateCoordinates()
         
+    def draw_system(self, PlotArea):
+        
+        self.PlotArea = PlotArea
+        self.fig = Figure(figsize=(5, 4), dpi=100)
+
+        self.canvas = FigureCanvasTkAgg(self.fig, master=PlotArea)
+        self.canvas.draw()
+
+        self.canvas.get_tk_widget().pack()
+        self.toolbar = NavigationToolbar2Tk(self.canvas, PlotArea)
+        self.toolbar.update()
+
+        self.updateCoordinates()
+
+    def updateCoordinates(self):    
+        self.ax = self.fig.add_subplot(111, projection="3d")
+
+        # Lower wishbone
+        self.lwb_x = np.array([self.A[0,0], self.r_0b[0,0], self.C[0,0]])
+        self.lwb_y = np.array([self.A[1,0], self.r_0b[1,0], self.C[1,0]])
+        self.lwb_z = np.array([self.A[2,0], self.r_0b[2,0], self.C[2,0]])
+    
+        # Upper wishbone
+        self.uwb_x = np.array([self.D[0,0], self.r_0e[0,0], self.F[0,0]])
+        self.uwb_y = np.array([self.D[1,0], self.r_0e[1,0], self.F[1,0]])
+        self.uwb_z = np.array([self.D[2,0], self.r_0e[2,0], self.F[2,0]])
+        
+        # Kingpin
+        self.kp_x = np.array([self.r_0b[0,0],self.r_0e[0,0]])
+        self.kp_y = np.array([self.r_0b[1,0],self.r_0e[1,0]])
+        self.kp_z = np.array([self.r_0b[2,0],self.r_0e[2,0]])
+        
+        # Steering bar
+        self.sb_x = np.array([self.r_0q[0,0], self.r_0r[0,0]])
+        self.sb_y = np.array([self.r_0q[1,0], self.r_0r[1,0]])
+        self.sb_z = np.array([self.r_0q[2,0], self.r_0r[2,0]])
+        
+        self.sb_wc_x = np.array([self.r_0q[0,0],self.r_0w[0,0]])
+        self.sb_wc_y = np.array([self.r_0q[1,0],self.r_0w[1,0]])
+        self.sb_wc_z = np.array([self.r_0q[2,0],self.r_0w[2,0]])    
+        
+        # Wheel Center
+        self.wc_x = np.array([self.r_0w[0,0],(self.r_0e[0,0]+ self.r_0b[0,0])/2])
+        self.wc_y = np.array([self.r_0w[1,0],(self.r_0e[1,0]+ self.r_0b[1,0])/2])
+        self.wc_z = np.array([self.r_0w[2,0],(self.r_0e[2,0]+ self.r_0b[2,0])/2])
+        
+        #ax.set_xlim(-1,4)
+        #ax.set_ylim(-1,4)
+        #ax.set_zlim(-1,4)
+    
+        self.ax.view_init(23, 35)
+        self.ax.plot3D(self.lwb_x,self.lwb_y,self.lwb_z,'red', linewidth=10)
+        self.ax.plot3D(self.uwb_x,self.uwb_y,self.uwb_z,'blue', linewidth=10)
+        self.ax.plot3D(self.kp_x,self.kp_y,self.kp_z,'green', linewidth=10)
+        self.ax.plot3D(self.sb_x,self.sb_y,self.sb_z,'gray', linewidth=10)
+        self.ax.plot3D(self.wc_x,self.wc_y,self.wc_z, 'green', linewidth=10)
+        self.ax.plot3D(self.sb_wc_x,self.sb_wc_y,self.sb_wc_z, 'gray',linewidth=10)
+        plt.show()
+        self.canvas.draw()
+
     def kinematics(self,phi,u):
         ###################################
         # Calculations for lower wishbone #
@@ -67,7 +186,7 @@ class double_wishbone:
         b = np.dot(r_bd.T,b_aux)
         c = np.dot(-r_bd.T*e_df2,r_de) - 0.5*(np.dot(r_de.T,r_de)+np.dot(r_bd.T,r_bd)-np.dot(r_be.T,r_be))
         
-        psi = trigon(a,b,c);
+        psi = trigon(a,b,c)
         
         A_psi = e_df2 + (np.identity(3)-e_df2)*np.cos(psi) + e_dfS*np.sin(psi)
         

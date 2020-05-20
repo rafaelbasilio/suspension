@@ -1,11 +1,8 @@
 from tkinter import *
 from tkinter import ttk
-import matplotlib
-matplotlib.use('TkAgg')
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from matplotlib.figure import Figure
-from matplotlib import pyplot as plt
 import numpy as np
+
+from double_wishbone import double_wishbone
 
 class application:  
         
@@ -40,14 +37,23 @@ class application:
         comboBox1.grid(column=0, row=1,columnspan=2, sticky="W", padx=5, pady=10)
         
         # If double wishbone selected
-        self.doubleWishboneInputs()
-        
+        suspensao = double_wishbone()
+        suspensao.doubleWishboneInputs(self.HardpointInfo)
+
+        # Plots
+        self.PlotArea = ttk.Frame(self.tab1)
+        suspensao.kinematics(0,0)
+        suspensao.draw_system(self.PlotArea)
+
         # Simulation details
-        self.SimDetails()    
+        self.SimDetails(suspensao)    
         
         # Draws left frame
         self.HardpointInfo.pack(side=LEFT)
-        
+
+        # Draws the figure frame
+        self.PlotArea.pack(side=LEFT)
+
         # Plots the torque and power curves
         self.tab_control.add(self.tab2, text='Angle Plots')
         
@@ -63,6 +69,9 @@ class application:
         Title = "Suspension Kinematics Simulator v1.0"
         appInfos ="""
         This software was originally designed by Rafael Basilio Chaves.
+        Thanks to Abel Arrieta Castro for the help with bug correcting.
+        The suspension models in this application were 100% based on the Book
+        Vehicle Dynamics: Fundamentals and Modeling, written by Prof. Georg Rill
         The original version can be found at: https://github.com/rafaelbasilio/suspension
         Feel free to distribute and modify it as you want.\n
         This sofrware is 100% free and OpenSource and it must stay like this. 
@@ -78,54 +87,9 @@ class application:
         
         # Packs the entire tabs
         self.tab_control.pack(expand=0, fill='both')
-        
-    def doubleWishboneInputs(self):
-        labelHP1 = ttk.Label(self.HardpointInfo, text = "LWB Forward")
-        labelHP1.grid(column=0, row=2, sticky="W", padx=5, pady=3)
-        HP1 = Entry(self.HardpointInfo)
-        HP1.grid(column=1, row=2, sticky="W", padx=5, pady=3)
 
-        labelHP2 = ttk.Label(self.HardpointInfo, text = "LWB Backward")
-        labelHP2.grid(column=0, row=3, sticky="W", padx=5, pady=3)
-        HP2 = Entry(self.HardpointInfo)
-        HP2.grid(column=1, row=3, sticky="W", padx=5, pady=3)
-
-        labelHP3 = ttk.Label(self.HardpointInfo, text = "LWB Outboard")
-        labelHP3.grid(column=0, row=4, sticky="W", padx=5, pady=3)
-        HP3 = Entry(self.HardpointInfo)
-        HP3.grid(column=1, row=4, sticky="W", padx=5, pady=3)
-        
-        labelHP4 = ttk.Label(self.HardpointInfo, text = "UWB Forward")
-        labelHP4.grid(column=0, row=5, sticky="W", padx=5, pady=3)
-        HP4 = Entry(self.HardpointInfo)
-        HP4.grid(column=1, row=5, sticky="W", padx=5, pady=3)
-
-        labelHP5 = ttk.Label(self.HardpointInfo, text = "UWB Backward")
-        labelHP5.grid(column=0, row=6, sticky="W", padx=5, pady=3)
-        HP5 = Entry(self.HardpointInfo)
-        HP5.grid(column=1, row=6, sticky="W", padx=5, pady=3)
-
-        labelHP6 = ttk.Label(self.HardpointInfo, text = "UWB Outboard")
-        labelHP6.grid(column=0, row=7, sticky="W", padx=5, pady=3)
-        HP6 = Entry(self.HardpointInfo)
-        HP6.grid(column=1, row=7, sticky="W", padx=5, pady=3)
-
-        labelHP7 = ttk.Label(self.HardpointInfo, text = "Steering bar in")
-        labelHP7.grid(column=0, row=8, sticky="W", padx=5, pady=3)
-        HP7 = Entry(self.HardpointInfo)
-        HP7.grid(column=1, row=8, sticky="W", padx=5, pady=3)
-
-        labelHP8 = ttk.Label(self.HardpointInfo, text = "Steering bar Out")
-        labelHP8.grid(column=0, row=9, sticky="W", padx=5, pady=3)
-        HP8 = Entry(self.HardpointInfo)
-        HP8.grid(column=1, row=9, sticky="W", padx=5, pady=3)
-
-        labelHP9 = ttk.Label(self.HardpointInfo, text = "Wheel center")
-        labelHP9.grid(column=0, row=10, sticky="W", padx=5, pady=3)
-        HP9 = Entry(self.HardpointInfo)
-        HP9.grid(column=1, row=10, sticky="W", padx=5, pady=3)
     
-    def SimDetails(self):
+    def SimDetails(self, kinematics):
 
         labelSimDet = ttk.Label(self.HardpointInfo, text = "Input range (lower wishbone)", font=("Helvetica", 10, 'bold'))
         labelSimDet.grid(column=0, row=11, columnspan=2, sticky="W", padx=5, pady=10)
@@ -139,6 +103,12 @@ class application:
         labelSimDet2.grid(column=0, row=13, sticky="W", padx=5, pady=3)
         SimDet2 = Entry(self.HardpointInfo)
         SimDet2.grid(column=1, row=13, sticky="W", padx=5, pady=3)
+
+        buttonSet = ttk.Button(master=self.HardpointInfo, text="Set", command=kinematics.setHardpoints)
+        buttonSet.grid(column=0, row=14, sticky="W", padx=5, pady=3)
+
+        buttonSimulate = ttk.Button(master=self.HardpointInfo, text="Simulate")
+        buttonSimulate.grid(column=1, row=14, sticky="W", padx=5, pady=3)
 
 window = Tk()
 window.title("Suspension Kinematics Simulator v1.0")
