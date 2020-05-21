@@ -37,140 +37,167 @@ class double_wishbone:
         self.WC = np.matrix([0,300,100]).T
     
     def doubleWishboneInputs(self, HardpointInfo):
+
         labelHP1 = ttk.Label(HardpointInfo, text = "LWB forward")
-        labelHP1.grid(column=0, row=2, sticky="W", padx=5, pady=3)
+        labelHP1.grid(column=0, row=3, sticky="W", padx=5, pady=3)
         
         self.AX = Entry(HardpointInfo, width=10)
-        self.AX.grid(column=1, row=2, sticky="W", padx=5, pady=3)
+        self.AX.grid(column=1, row=3, sticky="W", padx=5, pady=3)
         self.AX.insert(END,float(self.A[0][0]))
 
         self.AY = Entry(HardpointInfo, width=10)
-        self.AY.grid(column=2, row=2, sticky="W", padx=5, pady=3)
+        self.AY.grid(column=2, row=3, sticky="W", padx=5, pady=3)
         self.AY.insert(END,float(self.A[1][0]))
 
         self.AZ = Entry(HardpointInfo, width=10)
-        self.AZ.grid(column=3, row=2, sticky="W", padx=5, pady=3)
+        self.AZ.grid(column=3, row=3, sticky="W", padx=5, pady=3)
         self.AZ.insert(END,float(self.A[2][0]))
 
         labelHP2 = ttk.Label(HardpointInfo, text = "LWB wheel")
-        labelHP2.grid(column=0, row=3, sticky="W", padx=5, pady=3)
+        labelHP2.grid(column=0, row=4, sticky="W", padx=5, pady=3)
         
         self.BX = Entry(HardpointInfo, width=10)
-        self.BX.grid(column=1, row=3, sticky="W", padx=5, pady=3)
+        self.BX.grid(column=1, row=4, sticky="W", padx=5, pady=3)
         self.BX.insert(END,float(self.B[0][0]))
 
         self.BY = Entry(HardpointInfo, width=10)
-        self.BY.grid(column=2, row=3, sticky="W", padx=5, pady=3)
+        self.BY.grid(column=2, row=4, sticky="W", padx=5, pady=3)
         self.BY.insert(END,float(self.B[1][0]))
 
         self.BZ = Entry(HardpointInfo, width=10)
-        self.BZ.grid(column=3, row=3, sticky="W", padx=5, pady=3)
+        self.BZ.grid(column=3, row=4, sticky="W", padx=5, pady=3)
         self.BZ.insert(END,float(self.B[2][0]))
 
         labelHP3 = ttk.Label(HardpointInfo, text = "LWB backward")
-        labelHP3.grid(column=0, row=4, sticky="W", padx=5, pady=3)
+        labelHP3.grid(column=0, row=5, sticky="W", padx=5, pady=3)
         
         self.CX = Entry(HardpointInfo, width=10)
-        self.CX.grid(column=1, row=4, sticky="W", padx=5, pady=3)
+        self.CX.grid(column=1, row=5, sticky="W", padx=5, pady=3)
         self.CX.insert(END,float(self.C[0][0]))
 
         self.CY = Entry(HardpointInfo, width=10)
-        self.CY.grid(column=2, row=4, sticky="W", padx=5, pady=3)
+        self.CY.grid(column=2, row=5, sticky="W", padx=5, pady=3)
         self.CY.insert(END,float(self.C[1][0]))
 
         self.CZ = Entry(HardpointInfo, width=10)
-        self.CZ.grid(column=3, row=4, sticky="W", padx=5, pady=3)
+        self.CZ.grid(column=3, row=5, sticky="W", padx=5, pady=3)
         self.CZ.insert(END,float(self.C[2][0]))
 
         labelHP4 = ttk.Label(HardpointInfo, text = "UWB forward")
-        labelHP4.grid(column=0, row=5, sticky="W", padx=5, pady=3)
+        labelHP4.grid(column=0, row=6, sticky="W", padx=5, pady=3)
         
         self.DX = Entry(HardpointInfo, width=10)
-        self.DX.grid(column=1, row=5, sticky="W", padx=5, pady=3)
+        self.DX.grid(column=1, row=6, sticky="W", padx=5, pady=3)
         self.DX.insert(END,float(self.D[0][0]))
 
         self.DY = Entry(HardpointInfo, width=10)
-        self.DY.grid(column=2, row=5, sticky="W", padx=5, pady=3)
+        self.DY.grid(column=2, row=6, sticky="W", padx=5, pady=3)
         self.DY.insert(END,float(self.D[1][0]))
 
         self.DZ = Entry(HardpointInfo, width=10)
-        self.DZ.grid(column=3, row=5, sticky="W", padx=5, pady=3)
+        self.DZ.grid(column=3, row=6, sticky="W", padx=5, pady=3)
         self.DZ.insert(END,float(self.D[2][0]))
 
         labelHP5 = ttk.Label(HardpointInfo, text = "UWB wheel")
-        labelHP5.grid(column=0, row=6, sticky="W", padx=5, pady=3)
+        labelHP5.grid(column=0, row=7, sticky="W", padx=5, pady=3)
         
         self.EX = Entry(HardpointInfo, width=10)
-        self.EX.grid(column=1, row=6, sticky="W", padx=5, pady=3)
+        self.EX.grid(column=1, row=7, sticky="W", padx=5, pady=3)
         self.EX.insert(END,float(self.E[0][0]))
 
         self.EY = Entry(HardpointInfo, width=10)
-        self.EY.grid(column=2, row=6, sticky="W", padx=5, pady=3)
+        self.EY.grid(column=2, row=7, sticky="W", padx=5, pady=3)
         self.EY.insert(END,float(self.E[1][0]))
 
         self.EZ = Entry(HardpointInfo, width=10)
-        self.EZ.grid(column=3, row=6, sticky="W", padx=5, pady=3)
+        self.EZ.grid(column=3, row=7, sticky="W", padx=5, pady=3)
         self.EZ.insert(END,float(self.D[2][0]))
 
         labelHP6 = ttk.Label(HardpointInfo, text = "UWB backward")
-        labelHP6.grid(column=0, row=7, sticky="W", padx=5, pady=3)
+        labelHP6.grid(column=0, row=8, sticky="W", padx=5, pady=3)
         
         self.FX = Entry(HardpointInfo, width=10)
-        self.FX.grid(column=1, row=7, sticky="W", padx=5, pady=3)
+        self.FX.grid(column=1, row=8, sticky="W", padx=5, pady=3)
         self.FX.insert(END,float(self.F[0][0]))
 
         self.FY = Entry(HardpointInfo, width=10)
-        self.FY.grid(column=2, row=7, sticky="W", padx=5, pady=3)
+        self.FY.grid(column=2, row=8, sticky="W", padx=5, pady=3)
         self.FY.insert(END,float(self.F[1][0]))
 
         self.FZ = Entry(HardpointInfo, width=10)
-        self.FZ.grid(column=3, row=7, sticky="W", padx=5, pady=3)
+        self.FZ.grid(column=3, row=8, sticky="W", padx=5, pady=3)
         self.FZ.insert(END,float(self.F[2][0]))
 
         labelHP7 = ttk.Label(HardpointInfo, text = "Steering bar in")
-        labelHP7.grid(column=0, row=8, sticky="W", padx=5, pady=3)
+        labelHP7.grid(column=0, row=9, sticky="W", padx=5, pady=3)
         
         self.RX = Entry(HardpointInfo, width=10)
-        self.RX.grid(column=1, row=8, sticky="W", padx=5, pady=3)
+        self.RX.grid(column=1, row=9, sticky="W", padx=5, pady=3)
         self.RX.insert(END,float(self.R[0][0]))
 
         self.RY = Entry(HardpointInfo, width=10)
-        self.RY.grid(column=2, row=8, sticky="W", padx=5, pady=3)
+        self.RY.grid(column=2, row=9, sticky="W", padx=5, pady=3)
         self.RY.insert(END,float(self.R[1][0]))
 
         self.RZ = Entry(HardpointInfo, width=10)
-        self.RZ.grid(column=3, row=8, sticky="W", padx=5, pady=3)
+        self.RZ.grid(column=3, row=9, sticky="W", padx=5, pady=3)
         self.RZ.insert(END,float(self.R[2][0]))
 
         labelHP8 = ttk.Label(HardpointInfo, text = "Steering bar Out")
-        labelHP8.grid(column=0, row=9, sticky="W", padx=5, pady=3)
+        labelHP8.grid(column=0, row=10, sticky="W", padx=5, pady=3)
         
         self.QX = Entry(HardpointInfo, width=10)
-        self.QX.grid(column=1, row=9, sticky="W", padx=5, pady=3)
+        self.QX.grid(column=1, row=10, sticky="W", padx=5, pady=3)
         self.QX.insert(END,float(self.Q[0][0]))
 
         self.QY = Entry(HardpointInfo, width=10)
-        self.QY.grid(column=2, row=9, sticky="W", padx=5, pady=3)
+        self.QY.grid(column=2, row=10, sticky="W", padx=5, pady=3)
         self.QY.insert(END,float(self.Q[1][0]))
 
         self.QZ = Entry(HardpointInfo, width=10)
-        self.QZ.grid(column=3, row=9, sticky="W", padx=5, pady=3)
+        self.QZ.grid(column=3, row=10, sticky="W", padx=5, pady=3)
         self.QZ.insert(END,float(self.Q[2][0]))
 
         labelHP9 = ttk.Label(HardpointInfo, text = "Wheel center")
-        labelHP9.grid(column=0, row=10, sticky="W", padx=5, pady=3)
+        labelHP9.grid(column=0, row=11, sticky="W", padx=5, pady=3)
         
         self.WCX = Entry(HardpointInfo, width=10)
-        self.WCX.grid(column=1, row=10, sticky="W", padx=5, pady=3)
+        self.WCX.grid(column=1, row=11, sticky="W", padx=5, pady=3)
         self.WCX.insert(END,float(self.WC[0][0]))
 
         self.WCY = Entry(HardpointInfo, width=10)
-        self.WCY.grid(column=2, row=10, sticky="W", padx=5, pady=3)
+        self.WCY.grid(column=2, row=11, sticky="W", padx=5, pady=3)
         self.WCY.insert(END,float(self.WC[1][0]))
 
         self.WCZ = Entry(HardpointInfo, width=10)
-        self.WCZ.grid(column=3, row=10, sticky="W", padx=5, pady=3)
+        self.WCZ.grid(column=3, row=11, sticky="W", padx=5, pady=3)
         self.WCZ.insert(END,float(self.WC[2][0]))
+
+        labelSimDet = ttk.Label(HardpointInfo, text = "Input (lower wishbone)", font=("Helvetica", 10, 'bold'))
+        labelSimDet.grid(column=0, row=12, columnspan=3, sticky="W", padx=5, pady=10)
+        
+        labelSimDet1 = ttk.Label(HardpointInfo, text = "max. angle [deg]")
+        labelSimDet1.grid(column=0, row=13, sticky="W", padx=5, pady=3)
+        self.SimDet1 = Entry(HardpointInfo, width=10)
+        self.SimDet1.insert(END,"10")
+        self.SimDet1.grid(column=1, row=13, sticky="W", padx=5, pady=3)
+
+        labelSimDet2 = ttk.Label(HardpointInfo, text = "min. angle [deg]")
+        labelSimDet2.grid(column=0, row=14, sticky="W", padx=5, pady=3)
+        self.SimDet2 = Entry(HardpointInfo, width=10)
+        self.SimDet2.insert(END,"-10")
+        self.SimDet2.grid(column=1, row=14, sticky="W", padx=5, pady=3)
+
+        buttonSet = ttk.Button(master=HardpointInfo, text="Set", width=9, command=self.setHardpoints)
+        buttonSet.grid(column=2, row=1, sticky="W", padx=5, pady=3)
+
+        buttonSimulate = ttk.Button(master=HardpointInfo, text="Simulate", width=9, command=lambda: self.simulate(int(SimDet1.get()), int(SimDet2.get()), 0, 0))
+        buttonSimulate.grid(column=3, row=1, sticky="W", padx=5, pady=3)
+
+        moveLabel = ttk.Label(HardpointInfo)
+        moveLabel.grid(column=0, row=15, sticky="W", padx=5, pady=3)
+        self.moveBox = ttk.Spinbox(HardpointInfo, width=5)
+        self.moveBox.grid(column=1, row=15, sticky="W", padx=5, pady=3)
 
     def setHardpoints(self):
         self.kinematics(0,0)
@@ -186,6 +213,8 @@ class double_wishbone:
         self.R = np.matrix([float(self.RX.get()),float(self.RY.get()),float(self.RZ.get())]).T
         self.Q = np.matrix([float(self.QX.get()),float(self.QY.get()),float(self.QZ.get())]).T
         self.WC = np.matrix([float(self.WCX.get()),float(self.WCY.get()),float(self.WCZ.get())]).T
+
+        self.moveBox.config(from_=int(self.SimDet2.get()), to=int(self.SimDet1.get()))
 
         self.updateCoordinates()
         
@@ -240,12 +269,12 @@ class double_wishbone:
         self.ax.set_zlim(-100,300)
     
         self.ax.view_init(23, 35)
-        self.ax.plot3D(self.lwb_x,self.lwb_y,self.lwb_z,'red', linewidth=10)
-        self.ax.plot3D(self.uwb_x,self.uwb_y,self.uwb_z,'blue', linewidth=10)
-        self.ax.plot3D(self.kp_x,self.kp_y,self.kp_z,'green', linewidth=10)
-        self.ax.plot3D(self.sb_x,self.sb_y,self.sb_z,'gray', linewidth=10)
-        self.ax.plot3D(self.wc_x,self.wc_y,self.wc_z, 'green', linewidth=10)
-        self.ax.plot3D(self.sb_wc_x,self.sb_wc_y,self.sb_wc_z, 'gray',linewidth=10)
+        self.ax.plot3D(self.lwb_x,self.lwb_y,self.lwb_z,'red', linewidth=5)
+        self.ax.plot3D(self.uwb_x,self.uwb_y,self.uwb_z,'blue', linewidth=5)
+        self.ax.plot3D(self.kp_x,self.kp_y,self.kp_z,'green', linewidth=5)
+        self.ax.plot3D(self.sb_x,self.sb_y,self.sb_z,'gray', linewidth=5)
+        self.ax.plot3D(self.wc_x,self.wc_y,self.wc_z, 'green', linewidth=5)
+        self.ax.plot3D(self.sb_wc_x,self.sb_wc_y,self.sb_wc_z, 'gray',linewidth=5)
         plt.show()
         self.canvas.draw()
 
@@ -362,8 +391,5 @@ class double_wishbone:
         self.r_0w = self.r_0b + r_bw 
 
     def simulate(self, angMax, angMin, steerMin, steerMax):
-
         for angle in range(angMin, angMax+1):
             self.kinematics(math.radians(angMin + angle), 0)
-            self.updateCoordinates()
-            time.sleep(0.01)

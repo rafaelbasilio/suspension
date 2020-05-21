@@ -35,18 +35,28 @@ class application:
         # Sets double wishbone as default
         comboBox1.current(0)
         comboBox1.grid(column=0, row=1,columnspan=2, sticky="W", padx=5, pady=10)
-        
+
+        # Labels for hardpoints coordinates
+        labelUnits = ttk.Label(self.HardpointInfo, text = "Hardpoints", font=("Helvetica", 10, 'bold'))
+        labelUnits.grid(column=0, row=2, sticky="W", padx=5, pady=3)
+
+        labelUnits = ttk.Label(self.HardpointInfo, text = "X [m]", font=("Helvetica", 10, 'bold'))
+        labelUnits.grid(column=1, row=2, sticky="W", padx=5, pady=3)
+
+        labelUnits = ttk.Label(self.HardpointInfo, text = "Y [m]", font=("Helvetica", 10, 'bold'))
+        labelUnits.grid(column=2, row=2, sticky="W", padx=5, pady=3)
+
+        labelUnits = ttk.Label(self.HardpointInfo, text = "Z [m]", font=("Helvetica", 10, 'bold'))
+        labelUnits.grid(column=3, row=2, sticky="W", padx=5, pady=3)
+
         # If double wishbone selected
-        suspensao = double_wishbone()
-        suspensao.doubleWishboneInputs(self.HardpointInfo)
+        suspension = double_wishbone()
+        suspension.doubleWishboneInputs(self.HardpointInfo)
 
         # Plots
         self.PlotArea = ttk.Frame(self.tab1)
-        suspensao.kinematics(0,0)
-        suspensao.draw_system(self.PlotArea)
-
-        # Simulation details
-        self.SimDetails(suspensao)    
+        suspension.kinematics(0,0)
+        suspension.draw_system(self.PlotArea)    
         
         # Draws left frame
         self.HardpointInfo.pack(side=LEFT)
@@ -87,28 +97,6 @@ class application:
         
         # Packs the entire tabs
         self.tab_control.pack(expand=0, fill='both')
-
-    
-    def SimDetails(self, kinematics):
-
-        labelSimDet = ttk.Label(self.HardpointInfo, text = "Input range (lower wishbone)", font=("Helvetica", 10, 'bold'))
-        labelSimDet.grid(column=0, row=11, columnspan=2, sticky="W", padx=5, pady=10)
-        
-        labelSimDet1 = ttk.Label(self.HardpointInfo, text = "max. angle [deg]")
-        labelSimDet1.grid(column=0, row=12, sticky="W", padx=5, pady=3)
-        SimDet1 = Entry(self.HardpointInfo, width=10)
-        SimDet1.grid(column=1, row=12, sticky="W", padx=5, pady=3)
-
-        labelSimDet2 = ttk.Label(self.HardpointInfo, text = "min. angle [deg]")
-        labelSimDet2.grid(column=0, row=13, sticky="W", padx=5, pady=3)
-        SimDet2 = Entry(self.HardpointInfo, width=10)
-        SimDet2.grid(column=1, row=13, sticky="W", padx=5, pady=3)
-
-        buttonSet = ttk.Button(master=self.HardpointInfo, text="Set", command=kinematics.setHardpoints)
-        buttonSet.grid(column=0, row=14, sticky="W", padx=5, pady=3)
-
-        buttonSimulate = ttk.Button(master=self.HardpointInfo, text="Simulate", command=lambda: kinematics.simulate(10, -10, 0, 0))
-        buttonSimulate.grid(column=1, row=14, sticky="W", padx=5, pady=3)
 
 window = Tk()
 window.title("Suspension Kinematics Simulator v1.0")
