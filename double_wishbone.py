@@ -15,26 +15,27 @@ from matplotlib.figure import Figure
 from matplotlib import pyplot as plt
 import math
 import time
+from matplotlib.pyplot import clf
 
 
 class double_wishbone:
     def __init__(self):
         # Lower wishbone
-        self.A = np.matrix([100,0,0]).T
-        self.B = np.matrix([0,200,0]).T
-        self.C = np.matrix([-100,0,0]).T
+        self.A = np.matrix([0.8,0,0]).T
+        self.B = np.matrix([0,0.8,0]).T
+        self.C = np.matrix([-0.8,0,0]).T
         
         # Upper wishbone    
-        self.D = np.matrix([ 100,0,200]).T
-        self.E = np.matrix([ 0,200,200]).T
-        self.F = np.matrix([-100,0,200]).T
+        self.D = np.matrix([ 0.8,0,0.6]).T
+        self.E = np.matrix([ 0,0.8,0.6]).T
+        self.F = np.matrix([-0.8,0,0.6]).T
     
         # Steering bar
-        self.R = np.matrix([50,0,100]).T
-        self.Q = np.matrix([50,200,100]).T
+        self.R = np.matrix([0.6,0.2,0.3]).T
+        self.Q = np.matrix([0.6,0.6,0.3]).T
         
         # Wheel center
-        self.WC = np.matrix([0,300,100]).T
+        self.WC = np.matrix([0,1.2,0.3]).T
     
     def doubleWishboneInputs(self, HardpointInfo):
 
@@ -191,17 +192,25 @@ class double_wishbone:
         buttonSet = ttk.Button(master=HardpointInfo, text="Set", width=9, command=self.setHardpoints)
         buttonSet.grid(column=2, row=1, sticky="W", padx=5, pady=3)
 
-        buttonSimulate = ttk.Button(master=HardpointInfo, text="Simulate", width=9, command=lambda: self.simulate(int(SimDet1.get()), int(SimDet2.get()), 0, 0))
+        buttonSimulate = ttk.Button(master=HardpointInfo, text="Simulate", width=9, command=lambda: self.simulate(int(self.SimDet1.get()), int(self.SimDet2.get()), 0, 0))
         buttonSimulate.grid(column=3, row=1, sticky="W", padx=5, pady=3)
 
-        moveLabel = ttk.Label(HardpointInfo)
+        moveLabel = ttk.Label(HardpointInfo, text="Move suspension [deg]")
         moveLabel.grid(column=0, row=15, sticky="W", padx=5, pady=3)
-        self.moveBox = ttk.Spinbox(HardpointInfo, width=5)
+
+        self.moveBox = ttk.Spinbox(HardpointInfo, width=5, command=self.setHardpoints)
+        self.moveBox.insert(END, "0")
         self.moveBox.grid(column=1, row=15, sticky="W", padx=5, pady=3)
 
-    def setHardpoints(self):
-        self.kinematics(0,0)
+        moveLabel = ttk.Label(HardpointInfo, text="Steering displacement [m]")
+        moveLabel.grid(column=0, row=16, sticky="W", padx=5, pady=3)
 
+        self.SteerBox = ttk.Spinbox(HardpointInfo, width=5, from_=-1, to=1, increment=0.01, command=self.setHardpoints)
+        self.SteerBox.insert(END, "0")
+        self.SteerBox.grid(column=1, row=16, sticky="W", padx=5, pady=3)
+
+    def setHardpoints(self):
+        
         self.A = np.matrix([float(self.AX.get()),float(self.AY.get()),float(self.AZ.get())]).T
         self.B = np.matrix([float(self.BX.get()),float(self.BY.get()),float(self.BZ.get())]).T
         self.C = np.matrix([float(self.CX.get()),float(self.CY.get()),float(self.CZ.get())]).T
@@ -216,19 +225,19 @@ class double_wishbone:
 
         self.moveBox.config(from_=int(self.SimDet2.get()), to=int(self.SimDet1.get()))
 
+        self.kinematics(math.radians(-float(self.moveBox.get())),float(self.SteerBox.get()))
+
         self.updateCoordinates()
         
     def draw_system(self, PlotArea):
 
         self.PlotArea = PlotArea
-        self.fig = Figure(figsize=(5, 4), dpi=100)
+        self.fig = Figure(figsize=(5, 4))
 
         self.canvas = FigureCanvasTkAgg(self.fig, master=PlotArea)
         self.canvas.draw()
 
         self.canvas.get_tk_widget().pack()
-        self.toolbar = NavigationToolbar2Tk(self.canvas, PlotArea)
-        self.toolbar.update()
 
         self.updateCoordinates()
 
@@ -263,10 +272,10 @@ class double_wishbone:
         self.wc_x = np.array([self.r_0w[0,0],(self.r_0e[0,0]+ self.r_0b[0,0])/2])
         self.wc_y = np.array([self.r_0w[1,0],(self.r_0e[1,0]+ self.r_0b[1,0])/2])
         self.wc_z = np.array([self.r_0w[2,0],(self.r_0e[2,0]+ self.r_0b[2,0])/2])
-        
-        self.ax.set_xlim(-100,300)
-        self.ax.set_ylim(-100,400)
-        self.ax.set_zlim(-100,300)
+
+        self.ax.set_xlim(-1,1.3)
+        self.ax.set_ylim(0,1.3)
+        self.ax.set_zlim(0,1.3)
     
         self.ax.view_init(23, 35)
         self.ax.plot3D(self.lwb_x,self.lwb_y,self.lwb_z,'red', linewidth=5)
@@ -275,7 +284,7 @@ class double_wishbone:
         self.ax.plot3D(self.sb_x,self.sb_y,self.sb_z,'gray', linewidth=5)
         self.ax.plot3D(self.wc_x,self.wc_y,self.wc_z, 'green', linewidth=5)
         self.ax.plot3D(self.sb_wc_x,self.sb_wc_y,self.sb_wc_z, 'gray',linewidth=5)
-        plt.show()
+        
         self.canvas.draw()
 
     def kinematics(self,phi,u):
@@ -338,7 +347,9 @@ class double_wishbone:
         self.r_0e = self.D + r_0de
         
         beta = trigon(r_be[0],r_be[2],self.r_0e[0])
-        
+
+        self.caster_ang = beta
+
         A_beta = np.array([[np.cos(beta), 0, np.sin(beta)],
                            [0,            1,            0],
                            [-np.sin(beta),0, np.cos(beta)]])
@@ -347,6 +358,8 @@ class double_wishbone:
     
         alpha = trigon(r_0be[1],r_0be[2],r_be[1])
         
+        self.camber_ang = alpha
+
         A_alpha = np.array([[1,             0,              0],
                             [0, np.cos(alpha), -np.sin(alpha)],
                             [0, np.sin(alpha),  np.cos(alpha)]])
@@ -378,6 +391,9 @@ class double_wishbone:
         c = -(p1 + 0.5*p2)
         
         delta=trigon(a,b,c)
+
+        self.toe = delta
+
         A_delta= e_be2 + (np.identity(3)-e_be2)*np.cos(delta) + e_beS*np.sin(delta)
         
         A_w = np.matmul(A_alpha,np.matmul(A_beta,A_delta))
@@ -391,5 +407,6 @@ class double_wishbone:
         self.r_0w = self.r_0b + r_bw 
 
     def simulate(self, angMax, angMin, steerMin, steerMax):
-        for angle in range(angMin, angMax+1):
-            self.kinematics(math.radians(angMin + angle), 0)
+        for angle in range(-angMax, -angMin+1):
+            self.kinematics(math.radians(-angMax + angle), 0)
+            print(math.degrees(self.camber_ang))

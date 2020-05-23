@@ -1,7 +1,8 @@
 from tkinter import *
 from tkinter import ttk
 import numpy as np
-
+import matplotlib
+matplotlib.use('TkAgg')
 from double_wishbone import double_wishbone
 
 class application:  
